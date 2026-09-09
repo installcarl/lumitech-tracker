@@ -894,7 +894,7 @@ async function addJob(){
 }
 async function deleteJob(jobId){
   const job = data.jobs.find(j=>j.id===jobId); if(!job) return;
-  if(!confirm(`Delete "${job.name}" and all its logged parts? This can't be undone.`)) return;
+  if(!confirm(`Delete "${job.name}" and all its logged parts? This action can't be undone.`)) return;
   const partsToDelete = data.parts.filter(p=>p.jobId===jobId);
   data.jobs = data.jobs.filter(j=>j.id!==jobId);
   data.parts = data.parts.filter(p=>p.jobId!==jobId);
@@ -931,6 +931,8 @@ async function toggleInvoiced(partId){
 }
 async function deletePart(partId){
   const p = data.parts.find(x=>x.id===partId);
+  const label = p ? `"${p.name}"` : 'this part';
+  if(!confirm(`Delete ${label}? This action can't be undone.`)) return;
   data.parts = data.parts.filter(x=>x.id!==partId);
   render(); await saveData('Part removed');
   if(p && p.hasPhoto) dbxDelete('/photos/'+partId+'.jpg');
